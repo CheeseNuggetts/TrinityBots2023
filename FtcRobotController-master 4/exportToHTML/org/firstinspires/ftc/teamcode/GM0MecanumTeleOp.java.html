@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>GM0MecanumTeleOp.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+GM0MecanumTeleOp.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org.firstinspires.ftc.teamcode</span><span class="s0">;</span>
+
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.eventloop.opmode.LinearOpMode</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.eventloop.opmode.TeleOp</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.hardware.DcMotor</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.hardware.DcMotorSimple</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.hardware.Gamepad</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">com.qualcomm.robotcore.util.ElapsedTime</span><span class="s0">;</span>
+
+<span class="s1">@TeleOp</span>
+<span class="s0">public class </span><span class="s1">GM0MecanumTeleOp </span><span class="s0">extends </span><span class="s1">LinearOpMode {</span>
+
+    <span class="s0">private </span><span class="s1">ElapsedTime runtime = </span><span class="s0">new </span><span class="s1">ElapsedTime()</span><span class="s0">;</span>
+
+    <span class="s1">Gamepad currentGamepad1 = </span><span class="s0">new </span><span class="s1">Gamepad()</span><span class="s0">;</span>
+    <span class="s1">Gamepad currentGamepad2 = </span><span class="s0">new </span><span class="s1">Gamepad()</span><span class="s0">;</span>
+
+    <span class="s1">Gamepad previousGamepad1 = </span><span class="s0">new </span><span class="s1">Gamepad()</span><span class="s0">;</span>
+    <span class="s1">Gamepad previousGamepad2 = </span><span class="s0">new </span><span class="s1">Gamepad()</span><span class="s0">;</span>
+
+    <span class="s1">@Override</span>
+
+    <span class="s0">public void </span><span class="s1">runOpMode() </span><span class="s0">throws </span><span class="s1">InterruptedException {</span>
+        <span class="s2">// Declare our motors</span>
+        <span class="s2">// Make sure your ID's match your configuration</span>
+
+        <span class="s1">DcMotor frontLeftMotor = hardwareMap.dcMotor.get(</span><span class="s3">&quot;leftfront&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">DcMotor backLeftMotor = hardwareMap.dcMotor.get(</span><span class="s3">&quot;leftback&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">DcMotor frontRightMotor = hardwareMap.dcMotor.get(</span><span class="s3">&quot;rightfront&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">DcMotor backRightMotor = hardwareMap.dcMotor.get(</span><span class="s3">&quot;rightback&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">DcMotor fourstage = hardwareMap.dcMotor.get(</span><span class="s3">&quot;fourstage&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">DcMotor twostage = hardwareMap.dcMotor.get(</span><span class="s3">&quot;twostage&quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s2">// Reverse the right side motors. This may be wrong for your setup.</span>
+        <span class="s2">// If your robot moves backwards when commanded to go forwards,</span>
+        <span class="s2">// reverse the left side instead.</span>
+        <span class="s2">// See the note about this earlier on this page.</span>
+        <span class="s1">frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE)</span><span class="s0">;</span>
+        <span class="s1">backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE)</span><span class="s0">;</span>
+
+        <span class="s2">//Reverse viperslide motors</span>
+
+        <span class="s1">fourstage.setDirection(DcMotorSimple.Direction.REVERSE)</span><span class="s0">;</span>
+        <span class="s1">twostage.setDirection(DcMotorSimple.Direction.REVERSE)</span><span class="s0">;</span>
+
+        <span class="s1">waitForStart()</span><span class="s0">;</span>
+
+        <span class="s0">if </span><span class="s1">(isStopRequested()) </span><span class="s0">return;</span>
+
+        <span class="s0">while </span><span class="s1">(opModeIsActive()) {</span>
+
+            <span class="s2">//Idk what this is but it's helpful for the rising edge detector so whatever</span>
+
+            <span class="s1">previousGamepad1.copy(currentGamepad1)</span><span class="s0">;</span>
+            <span class="s1">previousGamepad2.copy(currentGamepad2)</span><span class="s0">;</span>
+
+            <span class="s1">currentGamepad1.copy(gamepad1)</span><span class="s0">;</span>
+            <span class="s1">currentGamepad2.copy(gamepad2)</span><span class="s0">;</span>
+
+            <span class="s2">//Four-stage viperslide</span>
+
+            <span class="s0">if </span><span class="s1">(gamepad1.b) {</span>
+                <span class="s1">fourstage.setPower(</span><span class="s4">1</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s1">fourstage.getCurrentPosition()</span><span class="s0">;</span>
+                <span class="s1">telemetry.update()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">else if </span><span class="s1">(gamepad1.a) {</span>
+                <span class="s1">fourstage.setPower(-</span><span class="s4">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">fourstage.setPower(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(!currentGamepad1.b &amp;&amp; previousGamepad1.b) {</span>
+                <span class="s1">fourstage.getCurrentPosition()</span><span class="s0">;</span>
+                <span class="s1">telemetry.update()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(!currentGamepad1.a &amp;&amp; previousGamepad1.a) {</span>
+                <span class="s1">fourstage.getCurrentPosition()</span><span class="s0">;</span>
+                <span class="s1">telemetry.update()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+
+            <span class="s2">//Two-stage viperslide</span>
+
+            <span class="s0">if </span><span class="s1">(gamepad1.y) {</span>
+                <span class="s1">twostage.setPower(</span><span class="s4">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">else if </span><span class="s1">(gamepad1.x) {</span>
+                <span class="s1">twostage.setPower(-</span><span class="s4">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">else </span><span class="s1">{</span>
+                <span class="s1">twostage.setPower(</span><span class="s4">0</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(!currentGamepad1.y &amp;&amp; previousGamepad1.y) {</span>
+                <span class="s1">twostage.getCurrentPosition()</span><span class="s0">;</span>
+                <span class="s1">telemetry.update()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s0">if </span><span class="s1">(!currentGamepad1.x &amp;&amp; previousGamepad1.x) {</span>
+                <span class="s1">twostage.getCurrentPosition()</span><span class="s0">;</span>
+                <span class="s1">telemetry.update()</span><span class="s0">;</span>
+            <span class="s1">}</span>
+
+            <span class="s0">double </span><span class="s1">y = -gamepad1.left_stick_y</span><span class="s0">; </span><span class="s2">// Remember, Y stick value is reversed</span>
+            <span class="s0">double </span><span class="s1">x = gamepad1.left_stick_x * </span><span class="s4">1.1</span><span class="s0">; </span><span class="s2">// Counteract imperfect strafing</span>
+            <span class="s0">double </span><span class="s1">rx = gamepad1.right_stick_x</span><span class="s0">;</span>
+
+            <span class="s2">// Denominator is the largest motor power (absolute value) or 1</span>
+            <span class="s2">// This ensures all the powers maintain the same ratio,</span>
+            <span class="s2">// but only if at least one is out of the range [-1, 1]</span>
+            <span class="s0">double </span><span class="s1">denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx)</span><span class="s0">, </span><span class="s4">1</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s0">double </span><span class="s1">frontLeftPower = (y + x + rx) / denominator</span><span class="s0">;</span>
+            <span class="s0">double </span><span class="s1">backLeftPower = (y - x + rx) / denominator</span><span class="s0">;</span>
+            <span class="s0">double </span><span class="s1">frontRightPower = (y - x - rx) / denominator</span><span class="s0">;</span>
+            <span class="s0">double </span><span class="s1">backRightPower = (y + x - rx) / denominator</span><span class="s0">;</span>
+
+            <span class="s1">frontLeftMotor.setPower(frontLeftPower/</span><span class="s4">2</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">backLeftMotor.setPower(backLeftPower/</span><span class="s4">2</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">frontRightMotor.setPower(frontRightPower/</span><span class="s4">2</span><span class="s1">)</span><span class="s0">;</span>
+            <span class="s1">backRightMotor.setPower(backRightPower/</span><span class="s4">2</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
