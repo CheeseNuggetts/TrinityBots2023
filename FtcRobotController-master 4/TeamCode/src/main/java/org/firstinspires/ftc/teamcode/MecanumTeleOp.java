@@ -67,6 +67,13 @@ public class MecanumTeleOp extends LinearOpMode {
         clarm.setPosition(0.85);
         claw.setPosition(0.05);
 
+        //Speed
+        Boolean normalmode = true;
+        Boolean turbomode = false;
+        Boolean slowmode = false;
+        String mode = "normalmode";
+
+
         waitForStart();
 
         if (isStopRequested()) {
@@ -91,7 +98,7 @@ public class MecanumTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.left_stick_button) {
-                claw.setPosition(0.25);
+                claw.setPosition(0.35);
             }
             if (gamepad1.right_stick_button) {
                 claw.setPosition(0.05);
@@ -165,10 +172,47 @@ public class MecanumTeleOp extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            frontLeftMotor.setPower(frontLeftPower / 2);
-            backLeftMotor.setPower(backLeftPower / 2);
-            frontRightMotor.setPower(frontRightPower / 2);
-            backRightMotor.setPower(backRightPower / 2);
+            if (gamepad1.x) {
+                slowmode = true;
+                turbomode = false;
+                normalmode = false;
+                mode = "slowmode";
+            }
+
+            if (gamepad1.y) {
+                slowmode = false;
+                turbomode = false;
+                normalmode = true;
+                mode = "normalmode";
+            }
+
+            if (gamepad1.b) {
+                slowmode = false;
+                turbomode = true;
+                normalmode = false;
+                mode = "turbomode";
+            }
+
+            telemetry.addData("mode", mode);
+
+            if (normalmode == true) {
+                frontLeftMotor.setPower(frontLeftPower / 2);
+                backLeftMotor.setPower(backLeftPower / 2);
+                frontRightMotor.setPower(frontRightPower / 2);
+                backRightMotor.setPower(backRightPower / 2);
+            }
+            if (turbomode == true) {
+                frontLeftMotor.setPower(frontLeftPower);
+                backLeftMotor.setPower(backLeftPower);
+                frontRightMotor.setPower(frontRightPower);
+                backRightMotor.setPower(backRightPower);
+            }
+            if (slowmode == true) {
+                frontLeftMotor.setPower(frontLeftPower / 5);
+                backLeftMotor.setPower(backLeftPower / 5);
+                frontRightMotor.setPower(frontRightPower / 5);
+                backRightMotor.setPower(backRightPower / 5);
+            }
         }
     }
 
