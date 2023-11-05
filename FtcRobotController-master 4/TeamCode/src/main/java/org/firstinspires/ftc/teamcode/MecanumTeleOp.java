@@ -25,9 +25,9 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor backLeftMotor = hardwareMap.dcMotor.get("leftback");
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("rightfront");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("rightback");
-        DcMotor fourstage = hardwareMap.dcMotor.get("fourstage");
+        //DcMotor fourstage = hardwareMap.dcMotor.get("fourstage");
         DcMotor twostage = hardwareMap.dcMotor.get("twostage");
-        DcMotor plane = hardwareMap.dcMotor.get("plane");
+        //DcMotor plane = hardwareMap.dcMotor.get("plane");
 
         //Servos
         Servo out = hardwareMap.get(Servo.class, "out");
@@ -43,15 +43,15 @@ public class MecanumTeleOp extends LinearOpMode {
 
         //Reverse viperslide motors
 
-        fourstage.setDirection(DcMotorSimple.Direction.REVERSE);
+        //fourstage.setDirection(DcMotorSimple.Direction.REVERSE);
         twostage.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Brake
-        fourstage.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //fourstage.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         twostage.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Set position
-        fourstage.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //fourstage.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //fourstage.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         twostage.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -60,8 +60,8 @@ public class MecanumTeleOp extends LinearOpMode {
         twostage.setTargetPosition(0);
         twostage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        fourstage.setTargetPosition(0);
-        fourstage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //fourstage.setTargetPosition(0);
+        //fourstage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         out.setPosition(1);
         clarm.setPosition(0.85);
@@ -119,10 +119,10 @@ public class MecanumTeleOp extends LinearOpMode {
             double CPR = 537.7;
 
             // Get the current position of the motor ticks
-            int fourpos = fourstage.getCurrentPosition();
+            /*int fourpos = fourstage.getCurrentPosition();
             double fourrev = fourpos / CPR;
             double fourang = fourrev * 360;
-            double fourangnorm = fourang % 360;
+            double fourangnorm = fourang % 360;*/
 
             int twopos = twostage.getCurrentPosition();
             double tworev = twopos / CPR;
@@ -141,7 +141,7 @@ public class MecanumTeleOp extends LinearOpMode {
                 twostage.setPower(.5);
             }
 
-            if (gamepad2.dpad_left) {
+            /*if (gamepad2.dpad_left) {
                 fourstage.setTargetPosition(3300);
                 fourstage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 fourstage.setPower(1);
@@ -150,13 +150,13 @@ public class MecanumTeleOp extends LinearOpMode {
                 fourstage.setTargetPosition(0);
                 fourstage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 fourstage.setPower(1);
-            }
+            }*/
 
-            if (gamepad1.right_bumper) {
+            /*if (gamepad1.right_bumper) {
                 plane.setPower(1);
             } else {
                 plane.setPower(0);
-            }
+            }*/
 
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
@@ -215,6 +215,10 @@ public class MecanumTeleOp extends LinearOpMode {
             }
         }
     }
+
+
+
+
 
 
 }
