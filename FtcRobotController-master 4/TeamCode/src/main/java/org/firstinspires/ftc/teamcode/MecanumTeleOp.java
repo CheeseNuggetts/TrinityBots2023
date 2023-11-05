@@ -33,6 +33,7 @@ public class MecanumTeleOp extends LinearOpMode {
         Servo out = hardwareMap.get(Servo.class, "out");
         Servo claw = hardwareMap.get(Servo.class, "claw");
         Servo clarm = hardwareMap.get(Servo.class, "clarm");
+        Servo plane = hardwareMap.get(Servo.class, "plane");
 
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
@@ -63,9 +64,10 @@ public class MecanumTeleOp extends LinearOpMode {
         //fourstage.setTargetPosition(0);
         //fourstage.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        out.setPosition(1);
-        clarm.setPosition(0.85);
-        claw.setPosition(0.05);
+        out.setPosition(.7);
+        clarm.setPosition(1);
+        claw.setPosition(0);
+        plane.setPosition(0);
 
         //Speed
         Boolean normalmode = true;
@@ -87,31 +89,38 @@ public class MecanumTeleOp extends LinearOpMode {
             telemetry.addData("out pos", out.getPosition());
             telemetry.addData("clarm pos", clarm.getPosition());
             telemetry.addData("clawpos", claw.getPosition());
+            telemetry.addData("planepos", plane.getPosition());
 
             telemetry.update();
 
             if (gamepad2.left_bumper) {
-                out.setPosition(1);
+                out.setPosition(.5);
             }
             else if (gamepad2.right_bumper) {
                 out.setPosition(0.15);
             }
 
-            if (gamepad1.left_stick_button) {
-                claw.setPosition(0.35);
+            if (gamepad2.left_stick_button) {
+                claw.setPosition(0.45);
             }
-            if (gamepad1.right_stick_button) {
-                claw.setPosition(0.05);
+            if (gamepad2.right_stick_button) {
+                claw.setPosition(0.02);
             }
 
             if (gamepad2.y) {
-                clarm.setPosition(0.85);
+                clarm.setPosition(1);
             }
             if (gamepad2.x) {
-                clarm.setPosition(0.35);
+                clarm.setPosition(0.57);
             }
             if (gamepad2.a) {
-                clarm.setPosition(0.2);
+                clarm.setPosition(0.527);
+            }
+            if (gamepad2.dpad_left) {
+                plane.setPosition(0);
+            }
+            if (gamepad2.dpad_right) {
+                plane.setPosition(1);
             }
 
 
